@@ -15,18 +15,13 @@ const Checklist: React.FC = () => {
   const months = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'];
   const company = COMPANIES.find(c => c.id === selectedCompany)!;
 
-  // [AJUSTE] Cálculo dinâmico incluindo 'Vazio' para o gráfico
   const stats = useMemo(() => {
-    const totalSlots = ACTIVITIES.length * 12; // Total de células possíveis no ano
-    
-    // Filtra logs apenas desta empresa e ano
+    const totalSlots = ACTIVITIES.length * 12;
     const companyLogs = MOCK_LOGS.filter(l => l.companyId === selectedCompany && l.year === selectedYear);
     
     const ok = companyLogs.filter(l => l.status === 'CONCLUIDA').length;
     const pd = companyLogs.filter(l => l.status === 'PENDENTE').length;
     const at = companyLogs.filter(l => l.status === 'ATRASADA').length;
-    
-    // [NOVO] Calculando Vazios (Total possível - Logs existentes)
     const empty = totalSlots - (ok + pd + at);
 
     return {
@@ -42,12 +37,11 @@ const Checklist: React.FC = () => {
     };
   }, [selectedCompany, selectedYear]);
 
-  // [NOVO] Dados para o Gráfico de Rosca
   const chartData = [
-    { name: 'OK', value: stats.ok, color: '#10b981' }, // emerald-500
-    { name: 'PD', value: stats.pd, color: '#f59e0b' }, // amber-500
-    { name: 'AT', value: stats.at, color: '#ef4444' }, // red-500
-    { name: 'Vazio', value: stats.empty, color: '#e2e8f0' }, // slate-200
+    { name: 'OK', value: stats.ok, color: '#10b981' },
+    { name: 'PD', value: stats.pd, color: '#f59e0b' },
+    { name: 'AT', value: stats.at, color: '#ef4444' },
+    { name: 'Vazio', value: stats.empty, color: '#e2e8f0' },
   ];
 
   const getStatusColor = (status?: ActivityStatus) => {
@@ -73,21 +67,22 @@ const Checklist: React.FC = () => {
   );
 
   return (
-    <div className="flex flex-col h-full bg-[#f6f7f8] p-6 gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    // [CORREÇÃO] h-full -> min-h-screen ou h-screen com flex-col para garantir scroll em landscape
+    <div className="flex flex-col h-full md:h-screen bg-[#f6f7f8] p-4 md:p-6 gap-4 md:gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500 overflow-hidden">
       
-      {/* 1. Área de Resumo */}
-      <div className="shrink-0 flex flex-col xl:flex-row gap-4 bg-white p-5 rounded-[1.5rem] border border-slate-200 shadow-sm">
-        <div className="flex-1 flex flex-col md:flex-row gap-4 items-center">
+      {/* 1. Área de Resumo (Responsiva) */}
+      <div className="shrink-0 flex flex-col xl:flex-row gap-4 bg-white p-4 md:p-5 rounded-[1.5rem] border border-slate-200 shadow-sm overflow-y-auto max-h-[40vh] md:max-h-none">
+        <div className="flex-1 flex flex-col md:flex-row gap-6 items-center">
            <div className="w-full md:w-auto space-y-4">
               <div>
-                <h2 className="text-xl font-black text-slate-800 tracking-tight leading-tight">{company.name}</h2>
+                <h2 className="text-xl font-black text-slate-800 tracking-tight leading-tight truncate">{company.name}</h2>
                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Exercício {selectedYear}</p>
               </div>
-              <div className="flex gap-3">
+              <div className="flex gap-2 md:gap-3 flex-wrap">
                  <select 
                     value={selectedCompany}
                     onChange={(e) => setSelectedCompany(e.target.value)}
-                    className="bg-slate-50 border-slate-200 rounded-lg text-xs font-bold text-slate-700 py-2 pl-3 pr-8 focus:ring-2 focus:ring-primary-400 cursor-pointer w-48"
+                    className="bg-slate-50 border-slate-200 rounded-lg text-xs font-bold text-slate-700 py-2 pl-3 pr-8 focus:ring-2 focus:ring-primary-400 cursor-pointer w-full md:w-48"
                   >
                     {COMPANIES.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                   </select>
@@ -104,19 +99,18 @@ const Checklist: React.FC = () => {
 
            <div className="hidden md:block w-px h-20 bg-slate-100"></div>
 
-           {/* Stats Visual (Gráfico + Números) */}
-           <div className="flex-1 w-full flex items-center justify-around gap-4">
+           {/* Stats Visual (Gráfico + Números) - [CORREÇÃO] Flex-wrap para evitar overflow do 'AT' */}
+           <div className="flex-1 w-full flex flex-wrap md:flex-nowrap items-center justify-around gap-4 md:gap-6">
               
-              {/* [NOVO] Gráfico de Rosca substituindo o texto "Total" */}
-              <div className="relative h-20 w-20 shrink-0">
+              <div className="relative h-16 w-16 md:h-20 md:w-20 shrink-0">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
                       data={chartData}
                       cx="50%"
                       cy="50%"
-                      innerRadius={22}
-                      outerRadius={35}
+                      innerRadius={18}
+                      outerRadius={30}
                       paddingAngle={2}
                       dataKey="value"
                       stroke="none"
@@ -133,33 +127,32 @@ const Checklist: React.FC = () => {
                     />
                   </PieChart>
                 </ResponsiveContainer>
-                {/* Texto central opcional para indicar total */}
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                   <span className="text-[10px] font-black text-slate-400">{stats.total}</span>
+                   <span className="text-[9px] md:text-[10px] font-black text-slate-400">{stats.total}</span>
                 </div>
               </div>
               
-              <div className="text-center">
+              <div className="text-center min-w-[60px]">
                 <span className="block text-[9px] font-black text-emerald-600 uppercase mb-1">OK</span>
                 <div className="flex items-baseline justify-center gap-1.5">
-                  <span className="text-3xl font-black text-emerald-500 tracking-tighter">{stats.ok}</span>
-                  <span className="text-sm font-bold text-emerald-600/60">{stats.okPct}%</span>
+                  <span className="text-2xl md:text-3xl font-black text-emerald-500 tracking-tighter">{stats.ok}</span>
+                  <span className="text-[10px] md:text-sm font-bold text-emerald-600/60">{stats.okPct}%</span>
                 </div>
               </div>
               
-              <div className="text-center">
+              <div className="text-center min-w-[60px]">
                 <span className="block text-[9px] font-black text-amber-600 uppercase mb-1">PD</span>
                 <div className="flex items-baseline justify-center gap-1.5">
-                  <span className="text-3xl font-black text-amber-500 tracking-tighter">{stats.pd}</span>
-                  <span className="text-sm font-bold text-amber-600/60">{stats.pdPct}%</span>
+                  <span className="text-2xl md:text-3xl font-black text-amber-500 tracking-tighter">{stats.pd}</span>
+                  <span className="text-[10px] md:text-sm font-bold text-amber-600/60">{stats.pdPct}%</span>
                 </div>
               </div>
               
-              <div className="text-center">
+              <div className="text-center min-w-[60px]">
                 <span className="block text-[9px] font-black text-red-600 uppercase mb-1">AT</span>
                 <div className="flex items-baseline justify-center gap-1.5">
-                  <span className="text-3xl font-black text-red-500 tracking-tighter">{stats.at}</span>
-                  <span className="text-sm font-bold text-red-600/60">{stats.atPct}%</span>
+                  <span className="text-2xl md:text-3xl font-black text-red-500 tracking-tighter">{stats.at}</span>
+                  <span className="text-[10px] md:text-sm font-bold text-red-600/60">{stats.atPct}%</span>
                 </div>
               </div>
            </div>
@@ -168,7 +161,7 @@ const Checklist: React.FC = () => {
 
       {/* 2. Área da Tabela */}
       <div className="flex-1 bg-white rounded-[1.5rem] border border-slate-200 shadow-sm overflow-hidden flex flex-col min-h-0">
-        <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center shrink-0 bg-white z-10">
+        <div className="px-4 md:px-6 py-4 border-b border-slate-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-3 shrink-0 bg-white z-10">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-primary-50 text-primary-600 rounded-lg flex items-center justify-center">
                <span className="material-symbols-outlined text-lg">table_view</span>
@@ -176,42 +169,45 @@ const Checklist: React.FC = () => {
             <h3 className="font-bold text-slate-700 text-sm">Mapa de Obrigações</h3>
           </div>
           
-          <div className="relative group">
+          <div className="relative group w-full md:w-auto">
             <span className="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-lg group-focus-within:text-primary-500">search</span>
             <input 
               type="text"
               value={activitySearch}
               onChange={(e) => setActivitySearch(e.target.value)}
               placeholder="Filtrar atividade..."
-              className="pl-9 pr-4 py-1.5 bg-slate-50 border-slate-200 rounded-lg text-xs font-bold w-48 focus:ring-2 focus:ring-primary-400 focus:bg-white transition-all placeholder:text-slate-400"
+              className="pl-9 pr-4 py-1.5 bg-slate-50 border-slate-200 rounded-lg text-xs font-bold w-full md:w-48 focus:ring-2 focus:ring-primary-400 focus:bg-white transition-all placeholder:text-slate-400"
             />
           </div>
         </div>
 
+        {/* Container com Scroll */}
         <div className="flex-1 overflow-auto custom-scrollbar relative">
-          <table className="w-full text-left border-collapse min-w-[1200px]">
+          <table className="w-full text-left border-collapse min-w-[800px] md:min-w-[1200px]">
             <thead className="sticky top-0 z-20 bg-white shadow-sm ring-1 ring-slate-100">
               <tr>
-                <th className="py-3 px-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] bg-white border-b border-slate-100 w-[260px] whitespace-nowrap">
-                   Atividade ({filteredActivities.length})
+                {/* [CORREÇÃO] Largura responsiva da coluna fixa: w-[120px] no mobile, w-[260px] no desktop */}
+                <th className="py-3 px-3 md:px-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] bg-white border-b border-slate-100 w-[120px] md:w-[260px] whitespace-nowrap sticky left-0 z-30 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">
+                   Atividade
                 </th>
                 {months.map(m => (
-                  <th key={m} className="py-3 px-1 text-center text-[10px] font-black text-slate-400 uppercase tracking-widest bg-white border-b border-slate-100">{m}</th>
+                  <th key={m} className="py-3 px-1 text-center text-[10px] font-black text-slate-400 uppercase tracking-widest bg-white border-b border-slate-100 min-w-[60px]">{m}</th>
                 ))}
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50">
               {filteredActivities.map((activity) => (
                 <tr key={activity.id} className="hover:bg-slate-50/80 transition-colors">
-                  <td className="py-2 px-6 align-middle bg-white sticky left-0 z-10 border-r border-slate-50/50">
-                    <span className="text-[11px] font-bold text-slate-700 block truncate" title={activity.title}>
+                  {/* [CORREÇÃO] Coluna de Atividades Fixa: Reduzida e com Truncate no mobile */}
+                  <td className="py-2 px-3 md:px-6 align-middle bg-white sticky left-0 z-10 border-r border-slate-50/50 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)] max-w-[120px] md:max-w-[260px]">
+                    <span className="text-[10px] md:text-[11px] font-bold text-slate-700 block truncate" title={activity.title}>
                       {activity.title}
                     </span>
                   </td>
                   {months.map((_, mIndex) => {
                     const log = MOCK_LOGS.find(l => l.activityId === activity.id && l.companyId === selectedCompany && l.month === mIndex);
                     return (
-                      <td key={mIndex} className="p-1 align-middle h-10">
+                      <td key={mIndex} className="p-1 align-middle h-10 min-w-[60px]">
                         <button 
                           onClick={() => handleCellClick(activity.id, mIndex)}
                           className={`w-full h-8 rounded-lg text-[10px] transition-all duration-200 flex items-center justify-center ${getStatusColor(log?.status)}`}
