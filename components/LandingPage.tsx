@@ -10,7 +10,7 @@ const LandingPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img src="/images/aikawi.png" alt="Aikawi Logo" className="h-10 w-auto" />
-            <span className="font-bold text-slate-800 text-xl tracking-tight hidden sm:block">NOVO RQ AIKAWI</span>
+            <span className="font-bold text-slate-800 text-xl tracking-tight hidden sm:block">Gestão Contábil Pro</span>
           </div>
           <div className="flex gap-4">
             <Link to="/app" className="px-6 py-2.5 text-sm font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-xl transition-all">
@@ -25,7 +25,7 @@ const LandingPage: React.FC = () => {
         <div className="max-w-7xl mx-auto text-center relative z-10">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-widest mb-8 animate-in slide-in-from-bottom-4 fade-in duration-700">
             <span className="w-2 h-2 rounded-full bg-indigo-600 animate-pulse"></span>
-            Desenvolvido por DataPerform
+            O Futuro da Aikawi Chegou
           </div>
           <h1 className="text-5xl md:text-7xl font-black text-slate-900 tracking-tight mb-6 leading-tight animate-in slide-in-from-bottom-8 fade-in duration-1000 delay-100">
             Do Documento Word à <br/>
@@ -35,7 +35,6 @@ const LandingPage: React.FC = () => {
             Elimine planilhas manuais e documentos soltos na rede. Centralize sua operação contábil em uma plataforma Web segura, inteligente e baseada em dados reais.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4 animate-in slide-in-from-bottom-8 fade-in duration-1000 delay-300">
-            {/* [AJUSTE] Mantido apenas o botão principal de acesso ao sistema */}
             <Link to="/app" className="px-10 py-4 bg-indigo-600 text-white rounded-2xl font-bold text-xl shadow-xl shadow-indigo-200 hover:bg-indigo-700 hover:-translate-y-1 transition-all flex items-center justify-center gap-3">
               Acessar Sistema Agora
               <span className="material-symbols-outlined">arrow_forward</span>
@@ -83,11 +82,7 @@ const LandingPage: React.FC = () => {
                     className="w-full h-auto object-cover relative z-0"
                 />
                 
-                <div className="absolute bottom-5 left-0 right-0 text-center z-20">
-                    <span className="px-5 py-2.5 bg-black/60 text-white text-xs font-bold uppercase tracking-widest rounded-full backdrop-blur-md shadow-sm">
-                        Visualização da Transformação
-                    </span>
-                </div>
+                {/* [REMOVIDO] Overlay "Visualização da Transformação" removido para limpar o visual */}
             </div>
           </div>
 
@@ -295,7 +290,7 @@ const LandingPage: React.FC = () => {
           </p>
           <Link to="/app" className="inline-flex items-center gap-3 px-10 py-5 bg-indigo-600 text-white rounded-2xl font-bold text-xl shadow-2xl shadow-indigo-300 hover:bg-indigo-700 hover:scale-105 transition-all">
             <span className="material-symbols-outlined text-3xl">rocket_launch</span>
-            Iniciar Aplicação WEB Agora
+            Iniciar Piloto Agora
           </Link>
         </div>
       </section>
@@ -303,8 +298,8 @@ const LandingPage: React.FC = () => {
       {/* FOOTER */}
       <footer className="bg-slate-50 py-12 border-t border-slate-200">
         <div className="max-w-7xl mx-auto px-6 flex justify-between items-center opacity-50 text-sm font-medium">
-          <p>&copy; 2026 Aikawi Contabilidade. Todos os direitos reservados.</p>
-          <p>Desenvolvido por DataPerform com Tecnologia Web de Ponta (React + Vite + IA).</p>
+          <p>&copy; 2024 Aikawi Contabilidade. Todos os direitos reservados.</p>
+          <p>Desenvolvido com Tecnologia Web de Ponta (React + Vite + IA).</p>
         </div>
       </footer>
     </div>
