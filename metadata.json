@@ -1,0 +1,8 @@
+{
+  "name": "Gestão Contábil Pro",
+  "description": "Plataforma de gestão de atividades contábeis com checklists, dashboards e registro de colaboradores.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
