@@ -17,13 +17,13 @@
 
 <br />
 
-## 🎥 Visão Geral do Produto
+## 🎥 A Transformação (Antes vs Depois)
 
-> **O Problema:** Anteriormente, o controle era feito através de documentos Word soltos em rede, sem versionamento, sem métricas e com baixa segurança.
+> **O Problema:** Processos descentralizados em arquivos Word, sem histórico e sem métricas.
 > 
-> **A Solução:** Uma aplicação Web robusta que centraliza a operação, garante conformidade (ISO 27001) e fornece inteligência de dados para tomada de decisão.
+> **A Solução:** Uma aplicação Web única que organiza, audita e gera inteligência sobre a operação.
 
-![Demonstração da Aplicação](public/gifs/pages.gif)
+![Comparativo Antes e Depois](public/gifs/antes_depois.gif)
 
 ---
 
